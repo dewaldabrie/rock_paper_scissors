@@ -1,1 +1,3 @@
 from human_interfaces.base import HumanInterfaceBase
+from human_interfaces.console import ConsoleInterface
+from human_interfaces.desktop_gui.desktop_gui import RPSGUI

@@ -1,10 +1,9 @@
-from players import RPSPlayerBase
+from players.base import RPSPlayerBase
 
 
 class Human(RPSPlayerBase):
 
-    def __init__(self, interface, *args,  **kwargs):
-        self.interface = interface
+    def __init__(self, *args,  **kwargs):
         super().__init__(*args, **kwargs)
 
     def __repr__(self):

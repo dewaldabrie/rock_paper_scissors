@@ -44,4 +44,4 @@ class BeatPrevMoveBot(RPSPlayerBase):
             return self.move_map[prev_opponent_move]
         # On the first move, do something random
         except IndexError:
-            return BasicRandBot().move()
+            return BasicRandBot(self.interface, self.history).move()

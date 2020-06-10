@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 
 class RPSPlayerBase(ABC):
     
-    def __init__(self, history):
+    def __init__(self, interface, history):
+        self.interface = interface
         self.history = history
     
     @abstractmethod

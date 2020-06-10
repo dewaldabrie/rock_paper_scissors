@@ -1,12 +1,7 @@
 """Provide a player interface via the console."""
-from pprint import pprint
 from time import sleep
 
-from human_interfaces import HumanInterfaceBase
-from state import WAIT_FOR_PLAYER_MOVES, FETCHING_OUTCOME
-
-
-
+from human_interfaces.base import HumanInterfaceBase
 
 
 class ConsoleInterface(HumanInterfaceBase):
@@ -18,9 +13,12 @@ class ConsoleInterface(HumanInterfaceBase):
             'p': 'paper',
             's': 'scissors'
         }
+        self.state = {}
 
     def get_move(self):
         move = input("Rock (r), paper (p), scissors (s)?")
+        if move == 'q':
+            exit(0)
         return move
 
     def show_error(self, err_msg):
@@ -46,23 +44,24 @@ class ConsoleInterface(HumanInterfaceBase):
     def _display_score(player1_total_score, player2_total_score):
         print("Score: human: %d, bot: %d" % (player1_total_score, player2_total_score))
 
-    def update(self, state):
-        state_name = state['state_name']
-        if state_name == FETCHING_OUTCOME:
-            self._countdown()
-        elif state_name == WAIT_FOR_PLAYER_MOVES:
-            # first round
-            if state['num_rounds'] == 0:
-                self._display_score(state['player1_total_score'], state['player2_total_score'])
-            else:
-                self._display_opponent_move(state['player2_latest_move'])
-                sleep(1)
-                self._display_outcome(
-                    state['player1_latest_move'],
-                    state['player2_latest_move'],
-                    state['player1_latest_point'],
-                    state['player2_latest_point'],
-                )
-                sleep(1)
-                self._display_score(state['player1_total_score'], state['player2_total_score'])
+    def update(self):
+        # first round
+        if self.state['num_rounds'] == 0:
+            self._display_score(self.state['player1_total_score'], self.state['player2_total_score'])
+        else:
+            self._display_opponent_move(self.state['player2_latest_move'])
+            sleep(1)
+            self._display_outcome(
+                self.state['player1_latest_move'],
+                self.state['player2_latest_move'],
+                self.state['player1_latest_point'],
+                self.state['player2_latest_point'],
+            )
+            sleep(1)
+            self._display_score(self.state['player1_total_score'], self.state['player2_total_score'])
+
+    def run(self):
+        while True:
+            self.state = self.engine.advance()
+            self.update()
 
